@@ -2,26 +2,17 @@
 
 Website von LUXURY EVENTS by DEKO.LUXURY – online unter https://dekoluxury.world (GitHub Pages).
 
-## Google-Bewertung automatisch anzeigen
+## Google-Bewertung ändern
 
-Im Info-Streifen und im Footer steht die aktuelle Google-Bewertung, z. B. „4,9 von 5 Sternen · 37 Google-Bewertungen“.
-Sie wird **einmal täglich automatisch** bei Google abgefragt (`.github/workflows/bewertungen.yml`,
-`tools/bewertungen.mjs`) und in `assets/data/bewertungen.json` gespeichert. Ändert sich die Note
-(z. B. von 4,9 auf 4,7) oder die Anzahl, zeigt die Website ab dem nächsten Tag den neuen Wert.
-Solange keine Daten da sind, steht dort „auf Google ansehen“.
+Die Bewertung steht an vier Stellen (Startbereich, Info-Streifen, Karte in der Galerie, Footer)
+und wird aus **einer** Zeile ganz oben in `assets/js/main.js` gefüllt:
 
-Einmalige Einrichtung:
+```js
+bewertung: { note: 5.0, anzahl: 3 },
+```
 
-1. https://console.cloud.google.com öffnen, ein Projekt anlegen und ein Abrechnungskonto verbinden
-   (Google verlangt das; ein Abruf pro Tag liegt im kostenlosen Monatskontingent).
-2. Unter „APIs & Dienste → Bibliothek“ die **Places API (New)** aktivieren.
-3. Unter „APIs & Dienste → Anmeldedaten“ einen **API-Schlüssel** erstellen und auf „Places API (New)“ beschränken.
-4. Hier im Repository: **Settings → Secrets and variables → Actions → New repository secret**,
-   Name `GOOGLE_PLACES_API_KEY`, Wert = der API-Schlüssel. Den Schlüssel nirgends sonst eintragen.
-5. **Actions → „Google-Bewertungen aktualisieren“ → Run workflow** starten. Im Protokoll steht,
-   welcher Eintrag gefunden wurde und welche Bewertung gespeichert ist.
-6. Optional: Die dort angezeigte Place-ID unter **Settings → Secrets and variables → Actions → Variables**
-   als `GOOGLE_PLACE_ID` speichern, dann wird immer genau dieser Eintrag abgefragt.
+Ändert sich etwas bei Google, einfach die Zahlen anpassen (Punkt statt Komma, z. B. `{ note: 4.9, anzahl: 12 }`).
+Die Sterne füllen sich passend (4,9 = fast fünf volle Sterne). `bewertung: null` blendet die Bewertung aus.
 
 ## Anfrageformular
 
