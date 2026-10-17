@@ -8,7 +8,7 @@ Die Bewertung steht an vier Stellen (Startbereich, Info-Streifen, Karte in der G
 und wird aus **einer** Zeile ganz oben in `assets/js/main.js` gefüllt:
 
 ```js
-bewertung: { note: 5.0, anzahl: 3 },
+bewertung: { note: 5.0, anzahl: 6 },
 ```
 
 Ändert sich etwas bei Google, einfach die Zahlen anpassen (Punkt statt Komma, z. B. `{ note: 4.9, anzahl: 12 }`).
