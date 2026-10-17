@@ -1528,3 +1528,41 @@ address { font-style: normal; }
   .reviews__actions .btn { width: 100%; }
   .rating-pill { font-size: 0.74rem; }
 }
+
+/* ---------- Anfrage am Handy: Formular zuerst, große klare Felder ---------- */
+.quick__label { margin-top: clamp(28px, 3vw, 40px); font-size: var(--fs-label); font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
+.quick__label + .quick { margin-top: 12px; }
+@media (max-width: 900px) {
+  /* Reihenfolge: Überschrift → Formular → „Lieber direkt?“ → Kontakt-Knöpfe */
+  .contact__grid { display: flex; flex-direction: column; gap: 0; }
+  .contact__info { display: contents; }
+  .contact__form-wrap { order: 1; margin-top: 28px; }
+  .quick__label { order: 2; margin-top: 36px; }
+  .quick { order: 3; }
+  .contact__list { order: 4; }
+}
+@media (max-width: 640px) {
+  .contact__lead { font-size: 1rem; margin-top: 14px; }
+  .contact__list { display: none; }
+  .form { padding: 24px 16px 26px; }
+  .form::before { display: none; }
+  .form__head { margin-bottom: 22px; }
+  .form__title { font-size: 1.9rem; }
+  .form__sub { margin-top: 8px; font-size: 0.86rem; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
+  .form__grid { gap: 30px; }
+  .field { gap: 7px; }
+  .field > label, .field > legend, .field__label { font-size: 0.92rem; letter-spacing: 0; text-transform: none; color: var(--text); }
+  .field input, .field select, .field textarea {
+    min-height: 52px; padding: 12px 14px; background: #fff;
+    border: 1px solid rgba(28, 26, 23, 0.2); border-radius: 10px;
+  }
+  .field textarea { min-height: 120px; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(168, 131, 76, 0.18); }
+  .field.has-error input { border-color: #9c3b2c; box-shadow: none; }
+  .select::after { right: 16px; }
+  .select select { padding-right: 40px; }
+  .field__hint { margin-top: -14px; font-size: 0.82rem; }
+  .form__foot { margin-top: 26px; gap: 12px; }
+  .form__submit { min-height: 56px; }
+  .form__legal { font-size: 0.76rem; }
+}
