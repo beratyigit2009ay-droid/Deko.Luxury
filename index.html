@@ -603,6 +603,7 @@
           <p class="contact__lead" data-reveal>Anlass, Datum, Ideen – schreibt uns ein paar Zeilen. Wir melden uns schnell und persönlich bei euch.</p>
 
           <!-- Telefon, WhatsApp und Instagram zentral in assets/js/main.js unter KONTAKT pflegen. -->
+          <p class="quick__label" data-reveal>Lieber direkt?</p>
           <ul class="quick" data-reveal>
             <li><a class="quick__btn" href="mailto:deko.luxury@gmx.de" data-contact="email"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-mail"/></svg><span><strong>E-Mail</strong><small data-contact-label>deko.luxury@gmx.de</small></span></a></li>
             <li><a class="quick__btn" href="tel:+491794310823" data-contact="phone"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg><span><strong>Kurz anrufen</strong><small data-contact-label>+49 179 4310823</small></span></a></li>
@@ -626,17 +627,17 @@
             <div class="form__grid">
               <div class="field field--full">
                 <label for="f-name">Name <span aria-hidden="true">*</span></label>
-                <input id="f-name" name="name" type="text" autocomplete="name" required>
+                <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Vor- und Nachname" required>
                 <p class="field__error" id="f-name-error" hidden>Bitte gebt euren Namen an.</p>
               </div>
               <div class="field">
                 <label for="f-email">E-Mail</label>
-                <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="f-reach-hint" data-describedby="f-reach-hint">
+                <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@beispiel.de" aria-describedby="f-reach-hint" data-describedby="f-reach-hint">
                 <p class="field__error" id="f-email-error" hidden>Bitte E-Mail-Adresse prüfen.</p>
               </div>
               <div class="field">
                 <label for="f-telefon">oder Telefon</label>
-                <input id="f-telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" aria-describedby="f-reach-hint" data-describedby="f-reach-hint">
+                <input id="f-telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" placeholder="z. B. 0176 12345678" aria-describedby="f-reach-hint" data-describedby="f-reach-hint">
                 <p class="field__error" id="f-telefon-error" hidden>Bitte Telefonnummer prüfen.</p>
               </div>
               <p class="field__hint field--full" id="f-reach-hint">E-Mail <em>oder</em> Telefon genügt – damit wir euch antworten können. <span class="field__error" data-reach-error hidden>Bitte gebt E-Mail oder Telefon an.</span></p>
