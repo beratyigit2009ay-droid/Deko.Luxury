@@ -606,7 +606,8 @@ var KONTAKT = {
     var fields = {
       name: { el: $('#f-name', form), test: function (v) { return v.trim().length > 1; } },
       email: { el: $('#f-email', form), test: function (v) { return !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); } },
-      telefon: { el: $('#f-telefon', form), test: function (v) { return !v.trim() || v.replace(/\D/g, '').length >= 6; } }
+      telefon: { el: $('#f-telefon', form), test: function (v) { return !v.trim() || v.replace(/\D/g, '').length >= 6; } },
+      ort: { el: $('#f-ort', form), test: function (v) { return v.trim().length > 1; } }
     };
     var setError = function (key, bad) {
       var f = fields[key];
@@ -645,6 +646,7 @@ var KONTAKT = {
       var lines = ['Hallo DEKO.LUXURY,', '', 'hier ist meine Anfrage über eure Website:', '', head('Was ich mir wünsche')];
       lines.push('Event-Art: ' + (val('eventart') || 'noch offen'));
       lines.push('Datum / Wunschzeitraum: ' + (val('datum') || 'noch offen'));
+      lines.push('Ort der Veranstaltung: ' + (val('ort') || 'noch offen'));
       if (val('nachricht')) lines.push('Nachricht:', val('nachricht'));
       lines.push('', head('Kontakt'), 'Name: ' + val('name'));
       if (val('email')) lines.push('E-Mail: ' + val('email'));
@@ -654,7 +656,7 @@ var KONTAKT = {
     var subjectLine = function (prefix) {
       var fd = new FormData(form);
       var val = function (k) { return String(fd.get(k) || '').trim(); };
-      return prefix + [val('eventart') || 'Beratung', val('datum'), val('name')].filter(Boolean).join(' · ');
+      return prefix + [val('eventart') || 'Beratung', val('datum'), val('ort'), val('name')].filter(Boolean).join(' · ');
     };
     // Telefonnummer für WhatsApp-Links: nur Ziffern, international (0176… → 49176…)
     var waNumber = function (tel) {
@@ -684,6 +686,7 @@ var KONTAKT = {
         _captcha: 'false',
         'Event-Art': val('eventart') || 'nicht angegeben',
         'Datum / Zeitraum': val('datum') || 'nicht angegeben',
+        'Ort der Veranstaltung': val('ort') || 'nicht angegeben',
         'Nachricht': val('nachricht') || '–',
         'Name': val('name'),
         'E-Mail': val('email') || '–',
@@ -791,6 +794,69 @@ var KONTAKT = {
     badge.className = 'hours__today';
     badge.textContent = 'Heute';
     $('th', todayRow).appendChild(badge);
+  }
+
+  /* ---------- Instagram-Reels: werden automatisch geladen, sobald man zur Galerie scrollt ----------
+     Abgespielt wird im Instagram-Player mit Ton. */
+  var reels = $$('[data-reel]');
+  if (reels.length) {
+    var reelsLoaded = false;
+    var processReels = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+    var loadReels = function () {
+      if (reelsLoaded) return;
+      reelsLoaded = true;
+      reels.forEach(function (li) {
+        var url = li.getAttribute('data-reel');
+        var q = doc.createElement('blockquote');
+        q.className = 'instagram-media';
+        q.setAttribute('data-instgrm-permalink', url);
+        q.setAttribute('data-instgrm-version', '14');
+        var a = doc.createElement('a');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'Video lädt … oder direkt auf Instagram ansehen';
+        q.appendChild(a);
+        li.textContent = '';
+        li.classList.add('is-loaded');
+        li.appendChild(q);
+      });
+      // Lädt Instagram nicht (z. B. blockiert), wird jede Karte zum Link auf das Reel bei Instagram
+      window.setTimeout(function () {
+        reels.forEach(function (li, i) {
+          if ($('iframe', li)) return;
+          var url = li.getAttribute('data-reel');
+          var a = doc.createElement('a');
+          a.className = 'reel__poster';
+          a.href = url; a.target = '_blank'; a.rel = 'noopener';
+          a.setAttribute('aria-label', 'Reel ' + (i + 1) + ' auf Instagram ansehen');
+          a.innerHTML = '<span class="reel__num" aria-hidden="true">0' + (i + 1) + '</span>'
+            + '<svg class="reel__mark" viewBox="0 0 136.62 141.12" aria-hidden="true"><use href="#monogram"/></svg>'
+            + '<span class="reel__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 5.5v13l10.5-6.5z"/></svg></span>'
+            + '<span class="reel__label"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>Auf Instagram ansehen</span>';
+          li.textContent = '';
+          li.classList.remove('is-loaded');
+          li.appendChild(a);
+        });
+      }, 8000);
+      if (window.instgrm) { processReels(); return; }
+      var sc = doc.createElement('script');
+      sc.async = true;
+      sc.src = 'https://www.instagram.com/embed.js';
+      sc.onload = processReels;
+      doc.body.appendChild(sc);
+    };
+    reels.forEach(function (li) { $('button', li).addEventListener('click', loadReels); });
+    // Videos direkt sichtbar: laden, sobald der Bereich in die Nähe des Bildschirms kommt
+    var reelsBox = $('.reels');
+    if ('IntersectionObserver' in window && reelsBox) {
+      var reelsIO = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        reelsIO.disconnect();
+        loadReels();
+      }, { rootMargin: '600px 0px' });
+      reelsIO.observe(reelsBox);
+    } else {
+      loadReels();
+    }
   }
 
   /* ---------- Nach oben ---------- */

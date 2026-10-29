@@ -1566,3 +1566,48 @@ address { font-style: normal; }
   .form__submit { min-height: 56px; }
   .form__legal { font-size: 0.76rem; }
 }
+
+/* ---------- Instagram-Reels in der Galerie ---------- */
+.reels { margin-top: clamp(56px, 7vw, 100px); }
+.reels__head { max-width: 640px; }
+.reels__title { margin: 10px 0 0; font-family: var(--serif); font-weight: 300; font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.8rem); line-height: 1.1; color: var(--ivory); }
+.reels__text { margin: 14px 0 0; color: var(--muted-light); font-weight: 300; }
+.reels__list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); margin-top: clamp(24px, 3vw, 36px); align-items: start; }
+.reel { min-width: 0; }
+.reel__poster {
+  position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; cursor: pointer;
+  border: 1px solid rgba(205, 176, 122, 0.35);
+  background: radial-gradient(90% 70% at 50% 40%, rgba(205, 176, 122, 0.22), rgba(205, 176, 122, 0) 70%), linear-gradient(160deg, #1f1b17, #0f0d0b);
+  color: var(--ivory); transition: border-color 0.5s var(--ease), transform 0.6s var(--ease);
+}
+.reel__poster::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(205, 176, 122, 0.16); pointer-events: none; }
+.reel__mark { position: absolute; width: 46%; height: auto; opacity: 0.12; }
+.reel__num { position: absolute; left: 22px; top: 18px; font-family: var(--serif); font-size: 1.1rem; letter-spacing: 0.1em; color: var(--gold-soft); }
+.reel__play {
+  position: relative; display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%;
+  background: rgba(246, 241, 233, 0.08); border: 1px solid rgba(230, 201, 131, 0.7);
+  transition: transform 0.5s var(--ease), background-color 0.5s var(--ease);
+}
+.reel__play svg { width: 30px; height: 30px; margin-left: 4px; fill: #e6c983; }
+.reel__label { position: absolute; left: 0; right: 0; bottom: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--champagne); }
+.reel__label svg { width: 16px; height: 16px; }
+.reel__poster:hover, .reel__poster:focus-visible { border-color: rgba(230, 201, 131, 0.85); transform: translateY(-3px); }
+.reel__poster:hover .reel__play, .reel__poster:focus-visible .reel__play { transform: scale(1.08); background: rgba(230, 201, 131, 0.18); }
+.reel.is-loaded { display: flex; justify-content: center; }
+.reel .instagram-media { width: 100%; min-width: 0 !important; max-width: 540px; margin: 0 !important; padding: 28px 18px; border: 1px solid rgba(205, 176, 122, 0.35); background: #fff; color: var(--text); text-align: center; }
+.reel .instagram-media a { color: var(--gold-deep); border-bottom: 1px solid currentColor; }
+.reel iframe.instagram-media { padding: 0; border: 0; border-radius: 3px !important; }
+.reels__note { margin-top: 18px; font-size: 0.8rem; color: var(--muted-light); }
+.reels__note a { color: var(--gold-soft); border-bottom: 1px solid rgba(205, 176, 122, 0.4); }
+@media (max-width: 900px) {
+  /* Am Handy: Reels nebeneinander zum Wischen */
+  .reels__list {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: max(326px, 80%);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+    margin-inline: calc(-1 * var(--gutter, 20px)); padding: 0 var(--gutter, 20px) 8px; scroll-padding-inline: var(--gutter, 20px);
+    scrollbar-width: none;
+  }
+  .reels__list::-webkit-scrollbar { display: none; }
+  .reel { scroll-snap-align: start; }
+  .reel__poster { aspect-ratio: 9 / 14; }
+}
