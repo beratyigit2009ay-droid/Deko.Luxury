@@ -796,9 +796,8 @@ var KONTAKT = {
     $('th', todayRow).appendChild(badge);
   }
 
-  /* ---------- Instagram-Reels: erst nach dem Antippen laden ----------
-     Vorher wird keine Verbindung zu Instagram aufgebaut. Ein Tipp lädt alle Reels auf einmal,
-     danach spielt man sie im Instagram-Player mit Ton ab. */
+  /* ---------- Instagram-Reels: werden automatisch geladen, sobald man zur Galerie scrollt ----------
+     Abgespielt wird im Instagram-Player mit Ton. */
   var reels = $$('[data-reel]');
   if (reels.length) {
     var reelsLoaded = false;
@@ -828,6 +827,18 @@ var KONTAKT = {
       doc.body.appendChild(sc);
     };
     reels.forEach(function (li) { $('button', li).addEventListener('click', loadReels); });
+    // Videos direkt sichtbar: laden, sobald der Bereich in die Nähe des Bildschirms kommt
+    var reelsBox = $('.reels');
+    if ('IntersectionObserver' in window && reelsBox) {
+      var reelsIO = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        reelsIO.disconnect();
+        loadReels();
+      }, { rootMargin: '600px 0px' });
+      reelsIO.observe(reelsBox);
+    } else {
+      loadReels();
+    }
   }
 
   /* ---------- Nach oben ---------- */
