@@ -815,9 +815,10 @@ var KONTAKT = {
         a.href = url; a.target = '_blank'; a.rel = 'noopener';
         a.textContent = 'Video lädt … oder direkt auf Instagram ansehen';
         q.appendChild(a);
-        li.textContent = '';
+        var box = $('.reel__media', li) || li;
+        box.textContent = '';
         li.classList.add('is-loaded');
-        li.appendChild(q);
+        box.appendChild(q);
       });
       // Lädt Instagram nicht (z. B. blockiert), wird jede Karte zum Link auf das Reel bei Instagram
       window.setTimeout(function () {
@@ -828,13 +829,13 @@ var KONTAKT = {
           a.className = 'reel__poster';
           a.href = url; a.target = '_blank'; a.rel = 'noopener';
           a.setAttribute('aria-label', 'Reel ' + (i + 1) + ' auf Instagram ansehen');
-          a.innerHTML = '<span class="reel__num" aria-hidden="true">0' + (i + 1) + '</span>'
-            + '<svg class="reel__mark" viewBox="0 0 136.62 141.12" aria-hidden="true"><use href="#monogram"/></svg>'
+          a.innerHTML = '<svg class="reel__mark" viewBox="0 0 136.62 141.12" aria-hidden="true"><use href="#monogram"/></svg>'
             + '<span class="reel__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.5 5.5v13l10.5-6.5z"/></svg></span>'
             + '<span class="reel__label"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"/></svg>Auf Instagram ansehen</span>';
-          li.textContent = '';
+          var box = $('.reel__media', li) || li;
+          box.textContent = '';
           li.classList.remove('is-loaded');
-          li.appendChild(a);
+          box.appendChild(a);
         });
       }, 8000);
       if (window.instgrm) { processReels(); return; }

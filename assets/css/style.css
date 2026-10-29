@@ -1612,48 +1612,66 @@ address { font-style: normal; }
   .reel__poster { aspect-ratio: 9 / 14; }
 }
 
-/* ---------- Reels: edler Goldrahmen (Passepartout mit Eckzier) ---------- */
+/* ---------- Reels: Bogenrahmen in Blattgold (passend zum Bogenfenster im Startbereich) ---------- */
 .reel {
-  position: relative; padding: 12px;
-  border: 1px solid transparent;
+  --frame: 1.5px; --arch: 120px;
+  position: relative; display: flex; flex-direction: column; padding: 0 14px 14px;
+  border: var(--frame) solid transparent;
+  border-radius: 50% 50% 6px 6px / var(--arch) var(--arch) 6px 6px;
   background:
-    linear-gradient(#15120f, #0f0d0b) padding-box,
-    linear-gradient(145deg, #f6e7b8 0%, #b8914f 22%, #5e4523 46%, #d9b979 70%, #8a6a38 100%) border-box;
-  box-shadow: 0 40px 70px -45px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(205, 176, 122, 0.06);
+    radial-gradient(120% 60% at 50% 0%, rgba(205, 176, 122, 0.16), rgba(205, 176, 122, 0) 60%) padding-box,
+    linear-gradient(180deg, #171310, #0d0b09) padding-box,
+    linear-gradient(115deg, #8a6a38 0%, #f6e7b8 18%, #b8914f 32%, #5e4523 48%, #e6c983 64%, #fff3cf 72%, #a8834c 86%, #8a6a38 100%) border-box;
+  background-size: 100% 100%, 100% 100%, 300% 100%;
+  box-shadow: 0 50px 80px -50px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(205, 176, 122, 0.05), inset 0 1px 0 rgba(255, 243, 207, 0.08);
+  animation: reel-shine 9s linear infinite;
   transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
 }
-/* feine Innenlinie */
-.reel::before { content: ""; position: absolute; inset: 5px; z-index: 2; border: 1px solid rgba(230, 201, 131, 0.28); pointer-events: none; }
-/* goldene Eckwinkel */
-.reel::after {
-  content: ""; position: absolute; inset: -6px; z-index: 2; pointer-events: none;
-  --c: #e6c983; --l: 22px;
-  background:
-    linear-gradient(var(--c), var(--c)) left top / var(--l) 1px no-repeat,
-    linear-gradient(var(--c), var(--c)) left top / 1px var(--l) no-repeat,
-    linear-gradient(var(--c), var(--c)) right top / var(--l) 1px no-repeat,
-    linear-gradient(var(--c), var(--c)) right top / 1px var(--l) no-repeat,
-    linear-gradient(var(--c), var(--c)) left bottom / var(--l) 1px no-repeat,
-    linear-gradient(var(--c), var(--c)) left bottom / 1px var(--l) no-repeat,
-    linear-gradient(var(--c), var(--c)) right bottom / var(--l) 1px no-repeat,
-    linear-gradient(var(--c), var(--c)) right bottom / 1px var(--l) no-repeat;
-  opacity: 0.85; transition: inset 0.6s var(--ease), opacity 0.6s var(--ease);
+@keyframes reel-shine { from { background-position: 0 0, 0 0, 0% 0; } to { background-position: 0 0, 0 0, 300% 0; } }
+/* zweite, feine Goldlinie innen – folgt dem Bogen */
+.reel::before {
+  content: ""; position: absolute; inset: 7px; z-index: 2; pointer-events: none;
+  border: 1px solid rgba(230, 201, 131, 0.32);
+  border-radius: 50% 50% 3px 3px / calc(var(--arch) - 7px) calc(var(--arch) - 7px) 3px 3px;
 }
-.reel:hover { transform: translateY(-4px); box-shadow: 0 50px 80px -45px rgba(0, 0, 0, 0.95), 0 0 46px -14px rgba(230, 201, 131, 0.35); }
-.reel:hover::after { inset: -10px; opacity: 1; }
-/* Inhalt im Rahmen: Karte ohne eigenen Rand, Instagram-Player bündig */
-.reel .reel__poster { border: 0; }
+/* Edelstein oben auf dem Bogen */
+.reel::after {
+  content: ""; position: absolute; left: 50%; top: -8px; z-index: 3; width: 14px; height: 14px;
+  transform: translateX(-50%) rotate(45deg);
+  background: linear-gradient(135deg, #fff3cf, #d9b979 45%, #8a6a38);
+  box-shadow: 0 0 0 4px #121010, 0 0 18px 2px rgba(230, 201, 131, 0.45);
+}
+.reel__crown {
+  position: relative; display: grid; justify-items: center; align-content: end; gap: 4px;
+  height: var(--arch); padding-bottom: 16px;
+}
+.reel__crown::after {
+  content: ""; position: absolute; left: 8%; right: 8%; bottom: 0; height: 1px;
+  background: linear-gradient(90deg, rgba(230, 201, 131, 0), rgba(230, 201, 131, 0.7) 50%, rgba(230, 201, 131, 0));
+}
+.reel__gem { width: 6px; height: 6px; margin-bottom: 4px; transform: rotate(45deg); background: #e6c983; box-shadow: 0 0 10px rgba(230, 201, 131, 0.6); }
+.reel__num { position: static; font-family: var(--serif); font-weight: 300; font-size: 2rem; line-height: 1; letter-spacing: 0.08em; color: transparent; background: linear-gradient(180deg, #fff3cf, #c9a463 60%, #8a6a38); -webkit-background-clip: text; background-clip: text; }
+.reel__kicker { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-soft); padding-left: 0.4em; }
+.reel__media { position: relative; z-index: 1; margin-top: 14px; border: 1px solid rgba(205, 176, 122, 0.35); background: #0b0a08; box-shadow: 0 0 0 4px rgba(13, 11, 9, 0.9), 0 0 0 5px rgba(205, 176, 122, 0.18); }
+.reel__base { position: relative; height: 18px; }
+.reel__base::before { content: ""; position: absolute; left: 50%; top: 9px; width: 46px; height: 1px; transform: translateX(-50%); background: linear-gradient(90deg, rgba(230, 201, 131, 0), #e6c983, rgba(230, 201, 131, 0)); }
+.reel__base::after { content: ""; position: absolute; left: 50%; top: 6px; width: 7px; height: 7px; transform: translateX(-50%) rotate(45deg); background: #e6c983; }
+/* Inhalt im Rahmen */
+.reel .reel__poster { border: 0; aspect-ratio: 4 / 5; }
 .reel .reel__poster::before { display: none; }
 .reel .reel__poster:hover, .reel .reel__poster:focus-visible { transform: none; }
-.reel.is-loaded { display: block; }
+.reel.is-loaded { display: flex; }
 .reel .instagram-media { border: 0; }
 .reel iframe.instagram-media { display: block; width: 100% !important; max-width: none !important; border-radius: 0 !important; box-shadow: none !important; }
+.reel:hover { transform: translateY(-5px); box-shadow: 0 60px 90px -50px rgba(0, 0, 0, 0.95), 0 0 60px -18px rgba(230, 201, 131, 0.4), inset 0 1px 0 rgba(255, 243, 207, 0.1); }
+.reels__list { padding-top: 10px; }
 @media (max-width: 900px) {
-  .reel { padding: 8px; }
-  .reel::after { inset: -4px; --l: 16px; }
-  .reels__list { padding-top: 8px; padding-bottom: 14px; }
+  .reel { --arch: 92px; padding: 0 10px 10px; }
+  .reel__num { font-size: 1.7rem; }
+  .reel .reel__poster { aspect-ratio: 9 / 13; }
+  .reels__list { padding-top: 12px; padding-bottom: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .reel, .reel::after { transition: none; }
+  .reel { animation: none; transition: none; }
   .reel:hover { transform: none; }
 }
