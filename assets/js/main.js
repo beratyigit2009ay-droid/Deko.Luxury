@@ -606,7 +606,8 @@ var KONTAKT = {
     var fields = {
       name: { el: $('#f-name', form), test: function (v) { return v.trim().length > 1; } },
       email: { el: $('#f-email', form), test: function (v) { return !v.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); } },
-      telefon: { el: $('#f-telefon', form), test: function (v) { return !v.trim() || v.replace(/\D/g, '').length >= 6; } }
+      telefon: { el: $('#f-telefon', form), test: function (v) { return !v.trim() || v.replace(/\D/g, '').length >= 6; } },
+      ort: { el: $('#f-ort', form), test: function (v) { return v.trim().length > 1; } }
     };
     var setError = function (key, bad) {
       var f = fields[key];
@@ -645,6 +646,7 @@ var KONTAKT = {
       var lines = ['Hallo DEKO.LUXURY,', '', 'hier ist meine Anfrage über eure Website:', '', head('Was ich mir wünsche')];
       lines.push('Event-Art: ' + (val('eventart') || 'noch offen'));
       lines.push('Datum / Wunschzeitraum: ' + (val('datum') || 'noch offen'));
+      lines.push('Ort der Veranstaltung: ' + (val('ort') || 'noch offen'));
       if (val('nachricht')) lines.push('Nachricht:', val('nachricht'));
       lines.push('', head('Kontakt'), 'Name: ' + val('name'));
       if (val('email')) lines.push('E-Mail: ' + val('email'));
@@ -654,7 +656,7 @@ var KONTAKT = {
     var subjectLine = function (prefix) {
       var fd = new FormData(form);
       var val = function (k) { return String(fd.get(k) || '').trim(); };
-      return prefix + [val('eventart') || 'Beratung', val('datum'), val('name')].filter(Boolean).join(' · ');
+      return prefix + [val('eventart') || 'Beratung', val('datum'), val('ort'), val('name')].filter(Boolean).join(' · ');
     };
     // Telefonnummer für WhatsApp-Links: nur Ziffern, international (0176… → 49176…)
     var waNumber = function (tel) {
@@ -684,6 +686,7 @@ var KONTAKT = {
         _captcha: 'false',
         'Event-Art': val('eventart') || 'nicht angegeben',
         'Datum / Zeitraum': val('datum') || 'nicht angegeben',
+        'Ort der Veranstaltung': val('ort') || 'nicht angegeben',
         'Nachricht': val('nachricht') || '–',
         'Name': val('name'),
         'E-Mail': val('email') || '–',
@@ -791,6 +794,40 @@ var KONTAKT = {
     badge.className = 'hours__today';
     badge.textContent = 'Heute';
     $('th', todayRow).appendChild(badge);
+  }
+
+  /* ---------- Instagram-Reels: erst nach dem Antippen laden ----------
+     Vorher wird keine Verbindung zu Instagram aufgebaut. Ein Tipp lädt alle Reels auf einmal,
+     danach spielt man sie im Instagram-Player mit Ton ab. */
+  var reels = $$('[data-reel]');
+  if (reels.length) {
+    var reelsLoaded = false;
+    var processReels = function () { if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process(); };
+    var loadReels = function () {
+      if (reelsLoaded) return;
+      reelsLoaded = true;
+      reels.forEach(function (li) {
+        var url = li.getAttribute('data-reel');
+        var q = doc.createElement('blockquote');
+        q.className = 'instagram-media';
+        q.setAttribute('data-instgrm-permalink', url);
+        q.setAttribute('data-instgrm-version', '14');
+        var a = doc.createElement('a');
+        a.href = url; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'Video lädt … oder direkt auf Instagram ansehen';
+        q.appendChild(a);
+        li.textContent = '';
+        li.classList.add('is-loaded');
+        li.appendChild(q);
+      });
+      if (window.instgrm) { processReels(); return; }
+      var sc = doc.createElement('script');
+      sc.async = true;
+      sc.src = 'https://www.instagram.com/embed.js';
+      sc.onload = processReels;
+      doc.body.appendChild(sc);
+    };
+    reels.forEach(function (li) { $('button', li).addEventListener('click', loadReels); });
   }
 
   /* ---------- Nach oben ---------- */
